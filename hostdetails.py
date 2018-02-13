@@ -22,12 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 Author: Patrick Olsen
-Email: patrick.olsen@sysforensics.org
-Twitter: @patrickrolsen
-
-TODO
-[ ] Not sure how I want the output to look
-[ ] Add network IP information
 '''
 
 from Registry import Registry
@@ -92,19 +86,22 @@ def getCurrentVerionInfo(reg_sys, reg_soft):
     product_name = key.value("ProductName").value()
     current_version = key.value("CurrentVersion").value()
     current_build = key.value("CurrentBuildNumber").value()
-    csd_version = key.value("CSDVersion").value()
+    try:
+        csd_version = key.value("CSDVersion").value()
+    except Registry.RegistryValueNotFoundException:
+        csd_version = 'Not Present'
     install_date = time.strftime('%a %b %d %H:%M:%S %Y (UTC)', \
                                  time.gmtime(key.value("InstallDate").value()))
 
     return product_name, current_version, current_build, csd_version, str(install_date)
 
 def output(sysinfo, timezone, domain, arch, lastaccess, compname):
-    print compname
-    print sysinfo[0], sysinfo[3], sysinfo[1], sysinfo[2], arch
-    print timezone
-    print domain
-    print sysinfo[4]
-    print lastaccess
+    print(compname)
+    print(sysinfo[0], sysinfo[3], sysinfo[1], sysinfo[2], arch)
+    print(timezone)
+    print(domain)
+    print(sysinfo[4])
+    print(lastaccess)
 
 def main():
     parser = argparse.ArgumentParser(description='Parse some host details from SYSTEM and SOFTWARE hives.')
